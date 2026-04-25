@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -14,3 +16,12 @@ def login_user(request):
         else:
             messages.error(request, "Invalid username or password.")
     return render(request, 'registration/login.html', {})
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect("login")  # Redirect to login page after logout
+
+def home(request): 
+    return render(request, 'auth_app/home/home.html',{})

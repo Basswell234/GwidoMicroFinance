@@ -23,4 +23,5 @@ urlpatterns = [
     path("village_banking/", include("village_banking.urls")),
     path("auth_app/", include('django.contrib.auth.urls')),
     path("auth_app/", include("auth_app.urls")),
+    path('', include('auth_app.urls')),
 ]
