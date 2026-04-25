@@ -84,7 +84,7 @@ class Membership(models.Model):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     
     def __str__(self):
-        return f"{self.person_id.firstname} - {self.category}"
+        return f"{self.person_id.firstname} - {self.role}"
     
     class Meta:
         ordering = ['-join_date']
@@ -100,6 +100,7 @@ class Investment(models.Model):
         ('monthly contribution', 'Monthly Contribution'),
         ('annual contribution', 'Annual Contribution'),
         ('loan', 'Loan'),
+        ('investment', 'Investment'),
     ]
     
     investment_id = models.AutoField(primary_key=True)
