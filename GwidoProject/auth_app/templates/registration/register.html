@@ -1,0 +1,567 @@
+{% extends "auth_app/home/base.html" %}
+
+{% block title %}Register Account{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-color: #4F46E5;
+        --secondary-color: #7C3AED;
+        --success-color: #10B981;
+        --danger-color: #EF4444;
+        --light-bg: #F9FAFB;
+        --border-color: #E5E7EB;
+        --text-primary: #1F2937;
+        --text-secondary: #6B7280;
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 30px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: -30px -20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 700px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .register-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 36px 30px;
+        text-align: center;
+    }
+
+    .register-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .register-header p {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 0;
+    }
+
+    .register-body {
+        padding: 40px 30px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .register-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .register-body::-webkit-scrollbar-track {
+        background: var(--light-bg);
+    }
+
+    .register-body::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+
+    .alert {
+        border-radius: 8px;
+        border: none;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .alert-success {
+        background-color: #ECFDF5;
+        color: #065F46;
+        border-left: 4px solid var(--success-color);
+    }
+
+    .alert-danger {
+        background-color: #FEF2F2;
+        color: #7F1D1D;
+        border-left: 4px solid var(--danger-color);
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .form-row.full {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .form-group label .required {
+        color: var(--danger-color);
+        margin-left: 2px;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 11px 13px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--text-primary);
+        background-color: white;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-control::placeholder {
+        color: var(--text-secondary);
+    }
+
+    .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234F46E5'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 18px;
+        padding-right: 36px;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    .form-text {
+        display: block;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 2px solid var(--border-color);
+    }
+
+    .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        grid-column: 1 / -1;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px -2px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: white;
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--light-bg);
+        border-color: var(--text-secondary);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 2px solid var(--border-color);
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .login-link a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 4px;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+        .register-header {
+            padding: 28px 20px;
+        }
+
+        .register-header h1 {
+            font-size: 24px;
+        }
+
+        .register-body {
+            padding: 24px 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .button-group {
+            grid-template-columns: 1fr;
+        }
+
+        .btn-primary {
+            grid-column: 1;
+        }
+    }
+
+    .password-strength {
+        margin-top: 8px;
+        font-size: 12px;
+    }
+
+    .strength-meter {
+        height: 4px;
+        background: var(--border-color);
+        border-radius: 2px;
+        overflow: hidden;
+        margin: 6px 0;
+    }
+
+    .strength-meter-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .strength-weak {
+        width: 33%;
+        background: var(--danger-color);
+    }
+
+    .strength-medium {
+        width: 66%;
+        background: var(--warning-color);
+    }
+
+    .strength-strong {
+        width: 100%;
+        background: var(--success-color);
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <!-- Header Section -->
+        <div class="register-header">
+            <h1>Register An Account</h1>
+        </div>
+
+        <!-- Form Section -->
+        <div class="register-body">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags | default:'info' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" novalidate>
+                {% csrf_token %}
+
+                <!-- Account Credentials Section -->
+                <div class="form-section">
+                    <div class="section-title">📝 Account Credentials</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">
+                                Username <span class="required">*</span>
+                            </label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.username.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">
+                                Email <span class="required">*</span>
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.email.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.password.id_for_label }}">
+                                Password <span class="required">*</span>
+                            </label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.password.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text">💡 Must contain: uppercase letter, number, and 8+ characters</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.confirm_password.id_for_label }}">
+                                Confirm Password <span class="required">*</span>
+                            </label>
+                            {{ form.confirm_password }}
+                            {% if form.confirm_password.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.confirm_password.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <div class="section-title">👤 Personal Information</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.first_name.id_for_label }}">
+                                First Name <span class="required">*</span>
+                            </label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.first_name.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.last_name.id_for_label }}">
+                                Last Name <span class="required">*</span>
+                            </label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.last_name.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.sex.id_for_label }}">
+                                Gender <span class="required">*</span>
+                            </label>
+                            {{ form.sex }}
+                            {% if form.sex.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.sex.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.occupation.id_for_label }}">
+                                Occupation <span class="required">*</span>
+                            </label>
+                            {{ form.occupation }}
+                            {% if form.occupation.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.occupation.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="{{ form.address.id_for_label }}">
+                                Address <span class="required">*</span>
+                            </label>
+                            {{ form.address }}
+                            {% if form.address.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.address.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact & Documentation Section -->
+                <div class="form-section">
+                    <div class="section-title">📞 Contact & Documentation</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.phone_number.id_for_label }}">
+                                Phone Number <span class="required">*</span>
+                            </label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.phone_number.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.nrc.id_for_label }}">
+                                {{ form.nrc.label }} <span class="required">*</span>
+                            </label>
+                            {{ form.nrc }}
+                            {% if form.nrc.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.nrc.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="{{ form.membership_desc.id_for_label }}">
+                                {{ form.membership_desc.label }}
+                            </label>
+                            {{ form.membership_desc }}
+                            {% if form.membership_desc.errors %}
+                                <div style="color: var(--danger-color); font-size: 12px; margin-top: 4px;">
+                                    {{ form.membership_desc.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <span>✓</span> Create Account
+                    </button>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">← Back to Login</a>
+                </div>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    Already have an account? <a href="{% url 'login' %}">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-dismiss alerts
+    document.querySelectorAll('.alert').forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.3s ease';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    });
+
+    // Form submission feedback
+    document.querySelector('form').addEventListener('submit', function() {
+        const btn = document.querySelector('.btn-primary');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span> Creating Account...';
+    });
+</script>
+{% endblock %}
