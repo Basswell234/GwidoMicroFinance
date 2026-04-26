@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Investment, Membership, Person, Loan
 from .forms import InvestmentForm, LoanRequestForm
-from datetime import date
+from datetime import date, timedelta
 
 
 @login_required
@@ -55,6 +55,7 @@ def request_loan(request):
     """
     Handle loan request form submission and display.
     Automatically retrieves the membership of the logged-in user.
+    Issue date is set to today and due date is automatically set to 3 months from today.
     GET: Display the loan request form
     POST: Process and save loan request with automatic membership assignment and pending status
     """
@@ -74,19 +75,21 @@ def request_loan(request):
             loan_obj.membership_id = membership
             loan_obj.loan_status = 'pending'
             loan_obj.amount_remaining = form.cleaned_data['amount']  # Initially equals the full amount
+            loan_obj.loan_issue_date = date.today()  # Set to today
+            loan_obj.due_date = date.today() + timedelta(days=90)  # 3 months from today
             loan_obj.save()
             messages.success(request, 'Loan request submitted successfully! Our team will review your request shortly.')
             return redirect('request_loan')
         else:
             messages.error(request, 'There was an error in your form. Please check and try again.')
     else:
-        form = LoanRequestForm(initial={
-            'loan_issue_date': date.today()
-        })
+        form = LoanRequestForm()
     
     context = {
         'form': form,
         'membership': membership,
-        'person': person
+        'person': person,
+        'today': date.today(),
+        'due_date': date.today() + timedelta(days=90)
     }
     return render(request, 'village_banking/requestloan.html', context)

@@ -362,39 +362,21 @@
 
             <!-- Collateral Description Field -->
             <div class="form-group">
-                <label for="{{ form.collateral_desc.id_for_label }}">{{ form.collateral_desc.label }} <span style="color: var(--danger-color);">*</span></label>
+                <label for="{{ form.collateral_desc.id_for_label }}">{{ form.collateral_desc.label }}</label>
                 {{ form.collateral_desc }}
                 {% if form.collateral_desc.errors %}
                     <div class="form-error">
                         {{ form.collateral_desc.errors.0 }}
                     </div>
                 {% endif %}
-                <small style="display: block; color: var(--text-secondary); margin-top: 6px;">Describe any assets you can pledge as collateral</small>
+                <small style="display: block; color: var(--text-secondary); margin-top: 6px;">Optional: Describe any assets you can pledge as collateral</small>
             </div>
 
-            <!-- Dates Row -->
-            <div class="form-row">
-                <!-- Loan Issue Date Field -->
-                <div class="form-group">
-                    <label for="{{ form.loan_issue_date.id_for_label }}">{{ form.loan_issue_date.label }} <span style="color: var(--danger-color);">*</span></label>
-                    {{ form.loan_issue_date }}
-                    {% if form.loan_issue_date.errors %}
-                        <div class="form-error">
-                            {{ form.loan_issue_date.errors.0 }}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Due Date Field -->
-                <div class="form-group">
-                    <label for="{{ form.due_date.id_for_label }}">{{ form.due_date.label }} <span style="color: var(--danger-color);">*</span></label>
-                    {{ form.due_date }}
-                    {% if form.due_date.errors %}
-                        <div class="form-error">
-                            {{ form.due_date.errors.0 }}
-                        </div>
-                    {% endif %}
-                </div>
+            <!-- Auto-populated dates info -->
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>📅 Loan Details:</strong><br>
+                Issue Date: <strong>{{ today }}</strong><br>
+                Due Date: <strong>{{ due_date }}</strong> (3 months from today)
             </div>
 
             <!-- Button Group -->
