@@ -4,7 +4,7 @@ This module contains Django forms for the village banking application.
 """
 
 from django import forms
-from .models import Investment
+from .models import Investment, Loan
 
 
 class InvestmentForm(forms.ModelForm):
@@ -51,3 +51,42 @@ class InvestmentForm(forms.ModelForm):
             'penalty': 'Penalty Amount',
             'expected_date': 'Expected Completion Date',
         }
+
+
+class LoanRequestForm(forms.ModelForm):
+    """
+    Form for requesting a loan.
+    Automatically assigns membership from the logged-in user.
+    Issue date is set to today and due date is automatically set to 3 months later.
+    Required fields: amount. Optional: collateral_desc.
+    """
+    
+    class Meta:
+        model = Loan
+        fields = ['amount', 'collateral_desc']
+        widgets = {
+            'amount': forms.NumberInput(attrs={
+                'class': 'form-control form-control-lg',
+                'placeholder': 'Enter Loan Amount',
+                'step': '0.01',
+                'min': '100',
+                'required': True
+            }),
+            'collateral_desc': forms.Textarea(attrs={
+                'class': 'form-control form-control-lg',
+                'placeholder': 'Describe the collateral you will provide (optional)',
+                'rows': 4,
+                'required': False
+            }),
+        }
+        labels = {
+            'amount': 'Loan Amount',
+            'collateral_desc': 'Collateral Description (Optional)',
+        }
+    
+    def clean_amount(self):
+        """Validate loan amount"""
+        amount = self.cleaned_data.get('amount')
+        if amount and amount < 100:
+            raise forms.ValidationError('Loan amount must be at least 100.')
+        return amount
