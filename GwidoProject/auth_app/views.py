@@ -2,9 +2,10 @@ from urllib import request
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from village_banking.models import Person
+from village_banking.models import Person, Membership, Investment, Loan, Transaction
 from .forms import RegistrationForm
 
 # Create your views here.
@@ -81,3 +82,51 @@ def logout_user(request):
 
 def home(request): 
     return render(request, 'auth_app/home/home.html',{})
+
+
+@login_required(login_url='login')
+def dashboard(request):
+    """
+    # Display the user dashboard with their financial overview.
+    # Shows membership info, investments, loans, and transactions.
+    # Only accessible to logged-in users.
+    # """
+    # try:
+    #     person = Person.objects.get(user=request.user)
+    #     membership = Membership.objects.get(person_id=person)
+    # except (Person.DoesNotExist, Membership.DoesNotExist):
+    #     messages.error(request, 'You must have a valid membership to access the dashboard.')
+    #     return redirect('home')
+    
+    # # Get user's financial data
+    # investments = Investment.objects.filter(membership_id=membership).order_by('-date')[:5]
+    # loans = Loan.objects.filter(membership_id=membership).order_by('-loan_issue_date')[:5]
+    # transactions = Transaction.objects.filter(membership_id=membership).order_by('-date')[:5]
+    
+    # # Calculate summary statistics
+    # total_investments = sum(inv.investment_amount for inv in investments)
+    # total_loan_amount = sum(loan.amount for loan in loans if loan.loan_status != 'cancelled')
+    # total_loan_remaining = sum(loan.amount_remaining for loan in loans if loan.loan_status in ['active', 'approved', 'pending'])
+    # total_transactions = transactions.count()
+    
+    # # Loan status breakdown
+    # pending_loans = loans.filter(loan_status='pending').count()
+    # active_loans = loans.filter(loan_status='active').count()
+    # paid_loans = loans.filter(loan_status='paid').count()
+    
+    # context = {
+    #     'person': person,
+    #     'membership': membership,
+    #     'investments': investments,
+    #     'loans': loans,
+    #     'transactions': transactions,
+    #     'total_investments': total_investments,
+    #     'total_loan_amount': total_loan_amount,
+    #     'total_loan_remaining': total_loan_remaining,
+    #     'total_transactions': total_transactions,
+    #     'pending_loans': pending_loans,
+    #     'active_loans': active_loans,
+    #     'paid_loans': paid_loans,
+    # }
+    
+    return render(request, 'auth_app/home/dashboard.html')
