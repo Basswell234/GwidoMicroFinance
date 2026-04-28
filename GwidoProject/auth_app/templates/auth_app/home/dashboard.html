@@ -305,8 +305,8 @@
                         <div class="card">
                             <div class="stat-widget-two card-body">
                                 <div class="stat-content">
-                                    <div class="stat-text">Today Expenses </div>
-                                    <div class="stat-digit"> <i class="fa fa-usd"></i>8500</div>
+                                    <div class="stat-text">Total Investments</div>
+                                    <div class="stat-digit"> <i class="fa fa-ZMW"></i>K {{total_system_investments}}</div>
                                 </div>
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-success w-85" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
@@ -318,8 +318,8 @@
                         <div class="card">
                             <div class="stat-widget-two card-body">
                                 <div class="stat-content">
-                                    <div class="stat-text">Income Detail</div>
-                                    <div class="stat-digit"> <i class="fa fa-usd"></i>7800</div>
+                                    <div class="stat-text">Total Loans</div>
+                                    <div class="stat-digit"> <i class="fa fa-ZMW"></i>K {{total_system_loans}}</div>
                                 </div>
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-primary w-75" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
@@ -375,17 +375,17 @@
                         <div class="card">
                             <div class="card-body text-center">
                                 <div class="m-t-10">
-                                    <h4 class="card-title">Customer Feedback</h4>
-                                    <h2 class="mt-3">385749</h2>
+                                    <h4 class="card-title">Total Users</h4>
+                                    <h2 class="mt-3">{{total_users}}</h2>
                                 </div>
                                 <div class="widget-card-circle mt-5 mb-5" id="info-circle-card">
                                     <i class="ti-control-shuffle pa"></i>
                                 </div>
                                 <ul class="widget-line-list m-b-15">
-                                    <li class="border-right">92% <br><span class="text-success"><i
-                                                class="ti-hand-point-up"></i> Positive</span></li>
-                                    <li>8% <br><span class="text-danger"><i
-                                                class="ti-hand-point-down"></i>Negative</span></li>
+                                    <li class="border-right">{{total_members_count}} <br><span class="text-success"><i
+                                                class="ti-hand-point-up"></i> Members</span></li>
+                                    <li>{{total_non_members_count}} <br><span class="text-danger"><i
+                                                class="ti-hand-point-down"></i>Non-Members</span></li>
                                 </ul>
                             </div>
                         </div>
